@@ -1,23 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { firestore } from "./firebase";
+import { useEffect, useState } from "react";
+import TranslateValue from "./TranslateValue";
+import TranslateButton from "./TranslateButton";
+import Result from "./Result";
 
 function App() {
+  const [text, setText] = useState("");
+  const [resultState, setResultState] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [ko, setKo] = useState('');
+  const [fr, setFr] = useState('');
+
+  const comments = firestore.collection("comments");
+  useEffect(() => {
+    firestore.collection("comments").onSnapshot((snapshot) => {
+      const foreignLanguage = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setLoading(true)
+      setKo(foreignLanguage[0].result.ko);
+      setFr(foreignLanguage[0].result.fr);
+      setLoading(false)
+    });
+  }, []);
+
+  const handleChange = (e) => {
+    return setText(e.target.value);
+  };
+
+  const postValue = () => {
+    setResultState(true);
+    comments.doc("foreignLanguage").set({ text: text });
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div style={{ marginTop: "30px" }}>
+        <TranslateValue
+          change={handleChange}
+          text={text}
+        />
+      </div>
+      <div style={{ display: "inline-flex", marginTop: "20px" }}>
+        <TranslateButton click={postValue} />
+      </div>
+      <Result loading={loading} state={resultState} ko={ko} fr={fr}/>
     </div>
   );
 }
