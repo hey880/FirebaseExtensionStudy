@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { firestore } from "./firebase";
 import { useEffect, useState } from "react";
@@ -12,6 +11,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [ko, setKo] = useState('');
   const [fr, setFr] = useState('');
+  const [en, setEn] = useState('');
+  const [ar, setAr] = useState('');
 
   const comments = firestore.collection("comments");
   useEffect(() => {
@@ -23,6 +24,8 @@ function App() {
       setLoading(true)
       setKo(foreignLanguage[0].result.ko);
       setFr(foreignLanguage[0].result.fr);
+      setEn(foreignLanguage[0].result.en);
+      setAr(foreignLanguage[0].result.ar);
       setLoading(false)
     });
   }, []);
@@ -47,7 +50,7 @@ function App() {
       <div style={{ display: "inline-flex", marginTop: "20px" }}>
         <TranslateButton click={postValue} />
       </div>
-      <Result loading={loading} state={resultState} ko={ko} fr={fr}/>
+      <Result loading={loading} state={resultState} ko={ko} fr={fr} en={en} ar={ar}/>
     </div>
   );
 }

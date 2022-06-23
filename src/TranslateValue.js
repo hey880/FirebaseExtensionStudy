@@ -14,12 +14,12 @@ export default function BasicTextFields({ change, text, keyDown }) {
     >
       <TextField
         id="outlined-basic"
-        label="value"
+        label="번역할 말을 써주세요"
         variant="outlined"
         onChange={change}
         value={text}
         onKeyDown={keyDown}
-        placeholder="value"
+        placeholder="번역할 말을 써주세요"
       />
     </Box>
   );

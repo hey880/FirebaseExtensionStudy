@@ -6,6 +6,8 @@ function Result (props) {
         return (
             <div>
                 <div>Korea: {props.ko}</div>
+                <div>English: {props.en}</div>
+                <div>Arab: {props.ar}</div>
                 <div>France: {props.fr}</div>
             </div>
         )
